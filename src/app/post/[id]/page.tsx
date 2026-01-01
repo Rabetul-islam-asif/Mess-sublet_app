@@ -7,11 +7,12 @@ import { ArrowLeft, MapPin, BedDouble, ShowerHead, Wifi, Phone, MessageCircle, S
 import { Button } from '@/components/ui/Button';
 import { MOCK_LISTINGS, Listing } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 
 export default function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // Unwrap params using use() hook as per Next.js 15+ guidance or async component pattern
   const resolvedParams = use(params);
+  const router = useRouter();
   const [post, setPost] = useState<Listing | null>(null);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -21,6 +22,16 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
       setPost(foundPost);
     }
   }, [resolvedParams.id]);
+
+  const handleAuthAction = (action: string) => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      alert(`Please login to ${action}.`);
+      router.push('/auth/login');
+      return;
+    }
+    alert(`${action} functionality coming soon!`);
+  };
 
   if (!post) {
     return <div className="flex h-screen items-center justify-center text-slate-600">Loading...</div>;
@@ -41,7 +52,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
           <Button variant="ghost" size="sm" className="rounded-full text-slate-600 hover:bg-slate-100">
             <Share2 className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="sm" className="rounded-full text-slate-600 hover:bg-slate-100">
+          <Button variant="ghost" size="sm" className="rounded-full text-slate-600 hover:bg-slate-100" onClick={() => handleAuthAction('like')}>
             <Heart className="h-5 w-5" />
           </Button>
         </div>
@@ -194,16 +205,16 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                     </div>
 
                     <div className="space-y-3">
-                        <button className="w-full rounded-xl bg-slate-900 py-4 text-base font-semibold text-white transition-all hover:bg-slate-800 active:scale-[0.98]">
+                        <button onClick={() => handleAuthAction('book')} className="w-full rounded-xl bg-slate-900 py-4 text-base font-semibold text-white transition-all hover:bg-slate-800 active:scale-[0.98]">
                             Request Booking
                         </button>
                         <div className="grid grid-cols-2 gap-3">
-                            <button className="w-full rounded-xl border-2 border-slate-200 bg-white py-4 text-base font-semibold text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.98]">
+                            <button onClick={() => handleAuthAction('call')} className="w-full rounded-xl border-2 border-slate-200 bg-white py-4 text-base font-semibold text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.98]">
                                 <span className="flex items-center justify-center">
                                     <Phone className="mr-2 h-5 w-5" /> Call Owner
                                 </span>
                             </button>
-                            <button className="w-full rounded-xl border-2 border-slate-200 bg-white py-4 text-base font-semibold text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.98]">
+                            <button onClick={() => handleAuthAction('message')} className="w-full rounded-xl border-2 border-slate-200 bg-white py-4 text-base font-semibold text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.98]">
                                 <span className="flex items-center justify-center">
                                     <MessageCircle className="mr-2 h-5 w-5" /> Send Message
                                 </span>
@@ -227,7 +238,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                   <p className="text-xl font-bold text-slate-900">৳{post.rent}</p>
                   <p className="text-xs text-slate-500">/month</p>
               </div>
-              <button className="flex-1 rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white transition-all hover:bg-slate-800 active:scale-[0.98]">
+              <button onClick={() => handleAuthAction('book')} className="flex-1 rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white transition-all hover:bg-slate-800 active:scale-[0.98]">
                   Request Booking
               </button>
           </div>

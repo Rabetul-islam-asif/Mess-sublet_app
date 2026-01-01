@@ -2,11 +2,16 @@
 
 import { Button } from "@/components/ui/Button";
 import { PostCard } from "@/components/ui/PostCard";
-import { Search, MapPin, ArrowRight } from "lucide-react";
+import { Search, MapPin, ArrowRight, Building2, Users, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { MOCK_LISTINGS } from "@/lib/data";
 
 export default function Home() {
+  // Calculate Stats
+  const totalAds = MOCK_LISTINGS.length;
+  // Get unique locations (simplified for mock)
+  const locations = Array.from(new Set(MOCK_LISTINGS.map(item => item.location.split(',')[0].trim())));
+
   return (
     <div className="flex flex-col gap-12 pb-20">
       {/* Hero Section */}
@@ -34,10 +39,20 @@ export default function Home() {
               </Button>
             </div>
             
-            <div className="mt-8 flex gap-6 text-sm text-primary-200 font-medium">
-               <span className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-secondary-400 mr-2"></span> Verified Listings</span>
-               <span className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-secondary-400 mr-2"></span> Direct Contact</span>
-               <span className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-secondary-400 mr-2"></span> No Hidden Fees</span>
+            {/* Stats Row */}
+            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-primary-800 pt-8">
+               <div>
+                  <div className="text-3xl font-bold text-white">{totalAds}+</div>
+                  <div className="text-sm text-primary-200">Active Ads</div>
+               </div>
+               <div>
+                  <div className="text-3xl font-bold text-white">50+</div>
+                  <div className="text-sm text-primary-200">Areas</div>
+               </div>
+               <div>
+                  <div className="text-3xl font-bold text-white">100%</div>
+                  <div className="text-sm text-primary-200">Verified</div>
+               </div>
             </div>
           </div>
         </div>
@@ -46,6 +61,26 @@ export default function Home() {
         <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-primary-800/50 blur-3xl mix-blend-overlay" />
         <div className="absolute -bottom-20 right-20 h-72 w-72 rounded-full bg-secondary-900/50 blur-3xl mix-blend-overlay" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150" />
+      </section>
+
+      {/* Popular Locations */}
+      <section className="container mx-auto px-4">
+         <h2 className="mb-6 text-xl font-bold text-slate-900">Popular Locations</h2>
+         <div className="flex flex-wrap gap-3">
+            {locations.map((loc) => (
+               <Link key={loc} href={`/search?location=${loc}`}>
+                 <div className="group flex items-center rounded-full border border-slate-200 bg-white px-5 py-2.5 transition-all hover:border-primary-500 hover:shadow-md cursor-pointer">
+                    <MapPin className="mr-2 h-4 w-4 text-slate-400 group-hover:text-primary-500" />
+                    <span className="font-medium text-slate-700 group-hover:text-primary-700">{loc}</span>
+                 </div>
+               </Link>
+            ))}
+            <Link href="/search">
+               <div className="flex items-center rounded-full border border-dashed border-slate-300 bg-slate-50 px-5 py-2.5 transition-all hover:bg-slate-100 cursor-pointer">
+                  <span className="font-medium text-slate-500">View All Locations</span>
+               </div>
+            </Link>
+         </div>
       </section>
 
       {/* Featured Listings - Single Section */}
@@ -63,11 +98,21 @@ export default function Home() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {MOCK_LISTINGS.map((post) => (
+          {MOCK_LISTINGS.slice(0, 8).map((post) => (
              <div key={post.id} className="h-full">
                <PostCard post={post} />
              </div>
           ))}
+        </div>
+        
+        {/* See More Button */}
+        <div className="mt-12 flex justify-center">
+            <Link href="/search">
+              <Button size="lg" variant="outline" className="rounded-full px-8 border-primary-200 text-primary-700 hover:bg-primary-50 hover:border-primary-300">
+                 See More Ads
+                 <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
         </div>
       </section>
     </div>

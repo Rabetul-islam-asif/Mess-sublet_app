@@ -7,13 +7,16 @@ import { MapPin, BedDouble, ShowerHead, Heart, ChevronLeft, ChevronRight } from 
 import { Listing } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
+import { useRouter } from 'next/navigation';
 
 interface PostCardProps {
   post: Listing;
 }
 
 export const PostCard = ({ post }: PostCardProps) => {
+  const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
   
   // Use images array if available, otherwise fallback to single image
   const images = post.images && post.images.length > 0 ? post.images : [post.image];
@@ -28,6 +31,20 @@ export const PostCard = ({ post }: PostCardProps) => {
     e.preventDefault();
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const user = localStorage.getItem('user');
+    if (!user) {
+      alert("Please login to like this post.");
+      router.push('/auth/login');
+      return;
+    }
+    
+    setIsLiked(!isLiked);
   };
 
   return (
@@ -85,14 +102,13 @@ export const PostCard = ({ post }: PostCardProps) => {
           
           {/* Favorite Button */}
           <button 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              // Add to favorites logic
-            }}
-            className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition-all hover:bg-white hover:text-red-500 hover:scale-110 active:scale-95"
+            onClick={handleLike}
+            className={cn(
+              "absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all hover:scale-110 active:scale-95",
+              isLiked ? "bg-white text-red-500" : "bg-white/20 text-white hover:bg-white hover:text-red-500"
+            )}
           >
-            <Heart className="h-5 w-5" />
+            <Heart className={cn("h-5 w-5", isLiked ? "fill-current" : "")} />
           </button>
           
           {/* Price Tag */}
