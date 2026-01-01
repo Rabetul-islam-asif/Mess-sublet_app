@@ -26,6 +26,7 @@ interface PostData {
   restrictions: string[];
   description: string;
   images: string[];
+  contact: string;
 }
 
 interface PostFormProps {
@@ -46,6 +47,7 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
     restrictions: [] as string[],
     description: '',
     images: [],
+    contact: '',
     ...initialData,
   });
   const [customRestriction, setCustomRestriction] = useState('');
@@ -164,6 +166,14 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
               type="month"
               value={formData.availableFrom}
               onChange={(e) => setFormData({ ...formData, availableFrom: e.target.value })}
+            />
+
+            <Input
+              label="Contact Number"
+              type="tel"
+              placeholder="e.g. 01712345678"
+              value={formData.contact}
+              onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
             />
           </div>
         );
