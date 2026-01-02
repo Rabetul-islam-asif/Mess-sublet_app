@@ -27,6 +27,7 @@ interface PostData {
   facilities: string[];
   restrictions: string[];
   description: string;
+  additionalInfo: string;
   images: string[];
   contact: string;
 }
@@ -49,6 +50,7 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
     facilities: [] as string[],
     restrictions: [] as string[],
     description: '',
+    additionalInfo: '',
     images: [],
     contact: '',
     ...initialData,
@@ -303,6 +305,25 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
                   </div>
                 ))}
               </div>
+            </div>
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-slate-700">Property Description</label>
+              <textarea 
+                placeholder="Describe your property (size, rooms, view etc.)"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full rounded-xl border border-slate-200 p-4 text-sm focus:ring-2 focus:ring-primary-500 outline-none min-h-[100px]"
+              />
+            </div>
+
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-slate-700">Additional Information (Optional)</label>
+              <textarea 
+                placeholder="Mention any other details (parking, gate timing, guest policy etc.)"
+                value={formData.additionalInfo}
+                onChange={(e) => setFormData({ ...formData, additionalInfo: e.target.value })}
+                className="w-full rounded-xl border border-slate-200 p-4 text-sm focus:ring-2 focus:ring-primary-500 outline-none min-h-[80px]"
+              />
             </div>
           </div>
         );

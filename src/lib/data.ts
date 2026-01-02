@@ -12,6 +12,7 @@ export interface Listing {
   image: string;
   images?: string[]; // For detail view gallery
   description?: string;
+  additionalInfo?: string;
   contactNumber?: string;
   availableFrom?: string;
   restrictions?: string[]; // e.g. "Muslim Only", "Non-Smoker", "Vegetarian"
@@ -34,6 +35,7 @@ export const MOCK_LISTINGS: Listing[] = [
     image: "https://i.ibb.co/5GzXhqB/room1.jpg",
     images: ["https://i.ibb.co/5GzXhqB/room1.jpg", "https://i.ibb.co/5GzXhqB/room1.jpg", "https://i.ibb.co/5GzXhqB/room1.jpg"],
     description: "A nice single room available for a bachelor. Full tiles, clean bathroom, and south-facing window. The flat is on the 4th floor with lift facility.",
+    additionalInfo: "Gate closes at 11:30 PM. Maid service is available for 800 per month. Meal system is also available.",
     contactNumber: "+8801700000000",
     availableFrom: "1st Jan 2025",
     restrictions: ["Muslim Only", "Non-Smoker"],

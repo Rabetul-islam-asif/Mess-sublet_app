@@ -239,6 +239,19 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                 </p>
             </div>
 
+            {/* Additional Information */}
+            {post.additionalInfo && (
+              <div className="px-4 md:px-0 bg-white p-5 rounded-xl border border-primary-50 bg-primary-50/10 md:shadow-none md:bg-white md:p-6 md:border-slate-100">
+                  <h3 className="mb-3 text-lg font-bold text-primary-900 flex items-center gap-2">
+                    <Info className="h-5 w-5 text-primary-500" />
+                    Additional Information
+                  </h3>
+                  <p className="leading-relaxed text-slate-700 whitespace-pre-line">
+                      {post.additionalInfo}
+                  </p>
+              </div>
+            )}
+
             {/* Facilities */}
             <div className="px-4 md:px-0 bg-white p-5 rounded-xl shadow-[0_2px_10px_-3px_rgba(0,0,0,0.1)] md:shadow-none md:p-0 md:bg-transparent">
                 <h3 className="mb-3 text-lg font-bold text-slate-900">Facilities</h3>
