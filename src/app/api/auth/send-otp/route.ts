@@ -10,7 +10,9 @@ export async function POST(request: Request) {
 
     // TODO: Integrate actual SMS gateway here
     // For now, we simulate success. The valid OTP for dev is "123456"
-    console.log(`OTP sent to ${phone}: 123456`);
+    // Special case for demo account
+    const otp = phone === '+8801885356821' ? '123' : '123456';
+    console.log(`OTP sent to ${phone}: ${otp}`);
 
     return NextResponse.json({ success: true, message: 'OTP sent successfully' });
   } catch (error) {

@@ -15,6 +15,7 @@ export interface Listing {
   availableFrom?: string;
   restrictions?: string[]; // e.g. "Muslim Only", "Non-Smoker", "Vegetarian"
   isVerified?: boolean;
+  isActive?: boolean;
 }
 
 export const MOCK_LISTINGS: Listing[] = [
@@ -34,7 +35,8 @@ export const MOCK_LISTINGS: Listing[] = [
     contactNumber: "+8801700000000",
     availableFrom: "Jan 1, 2025",
     restrictions: ["Muslim Only", "Non-Smoker"],
-    isVerified: true
+    isVerified: true,
+    isActive: true
   },
   {
     id: 2,
@@ -52,7 +54,8 @@ export const MOCK_LISTINGS: Listing[] = [
     contactNumber: "+8801700000000",
     availableFrom: "Ready",
     restrictions: ["Family Only", "No Pets"],
-    isVerified: true
+    isVerified: true,
+    isActive: true
   },
   {
     id: 3,
@@ -69,7 +72,8 @@ export const MOCK_LISTINGS: Listing[] = [
     contactNumber: "+8801700000000",
     availableFrom: "Feb 1, 2025",
     restrictions: ["Female Student Only", "Job Holders Not Allowed"],
-    isVerified: false
+    isVerified: false,
+    isActive: true
   },
   {
     id: 4,
@@ -85,7 +89,8 @@ export const MOCK_LISTINGS: Listing[] = [
     description: "Huge master bedroom with attached bath and balcony. Perfect for a couple. 6th floor with nice view.",
     contactNumber: "+8801700000000",
     availableFrom: "Jan 1, 2025",
-    isVerified: true
+    isVerified: true,
+    isActive: true
   },
   {
     id: 5,
@@ -101,6 +106,7 @@ export const MOCK_LISTINGS: Listing[] = [
     description: "Budget friendly seat at Farmgate. Very close to Tejgaon college and University.",
     contactNumber: "+8801700000000",
     availableFrom: "Immediate",
-    isVerified: false
+    isVerified: false,
+    isActive: true
   },
 ];

@@ -11,7 +11,7 @@ export default function PostPage() {
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (!user) {
-      router.push('/auth/login');
+      router.push('/auth/login?message=You must login to create a post');
     } else {
       setIsLoading(false);
     }

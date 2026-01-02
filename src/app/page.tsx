@@ -9,14 +9,17 @@ import { MOCK_LISTINGS, Listing } from "@/lib/data";
 import { getRecommendedPosts } from "@/lib/recommendations";
 
 export default function Home() {
-  const [listings, setListings] = useState<Listing[]>(MOCK_LISTINGS);
+  const [listings, setListings] = useState<Listing[]>(MOCK_LISTINGS.filter(l => l.isActive !== false));
 
   useEffect(() => {
     // Load liked posts from local storage and get personal recommendations
     const liked = JSON.parse(localStorage.getItem('liked_posts') || '[]');
+    const activeListings = MOCK_LISTINGS.filter(l => l.isActive !== false);
     if (liked.length > 0) {
-      const sorted = getRecommendedPosts(MOCK_LISTINGS, liked);
+      const sorted = getRecommendedPosts(activeListings, liked);
       setListings(sorted);
+    } else {
+      setListings(activeListings);
     }
   }, []);
 
@@ -110,7 +113,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {listings.slice(0, 8).map((post) => (
              <div key={post.id} className="h-full">
                <PostCard post={post} />

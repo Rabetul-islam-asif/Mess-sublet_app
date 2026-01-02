@@ -9,7 +9,9 @@ export async function POST(request: Request) {
     }
 
     // Mock verification
-    if (otp !== '123456') {
+    const isDemoAccount = phone === '+8801885356821' && otp === '123';
+    
+    if (otp !== '123456' && !isDemoAccount) {
       return NextResponse.json({ error: 'Invalid OTP' }, { status: 400 });
     }
 
@@ -18,8 +20,8 @@ export async function POST(request: Request) {
     const isNewUser = phone === '+8801234567890'; // Mock logic: specific number is "new"
 
     const mockUser = {
-      id: 'user_123',
-      name: isNewUser ? null : 'Asif Rabetul',
+      id: isDemoAccount ? 'demo_user' : 'user_123',
+      name: isDemoAccount ? 'Demo Account' : (isNewUser ? null : 'Asif Rabetul'),
       phone: phone,
       isVerified: true
     };

@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, BedDouble, ShowerHead, Wifi, Phone, MessageCircle, Share2, Heart, ShieldCheck, User, Calendar, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, MapPin, BedDouble, ShowerHead, Wifi, Phone, MessageCircle, Share2, Heart, ShieldCheck, User, Calendar, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { MOCK_LISTINGS, Listing } from '@/lib/data';
 import { cn } from '@/lib/utils';
@@ -33,11 +33,29 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
     alert(`${action} functionality coming soon!`);
   };
 
+  const handleShare = (e: React.MouseEvent) => {
+    if (!post) return;
+    e.preventDefault();
+    if (navigator.share) {
+      navigator.share({
+        title: post.title,
+        text: `Check out this ${post.type} in ${post.location}`,
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    }
+  };
+
   if (!post) {
     return <div className="flex h-screen items-center justify-center text-slate-600">Loading...</div>;
   }
 
   const images = post.images || [post.image];
+
+  const nextImage = () => setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  const prevImage = () => setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
 
   return (
     <div className="min-h-screen bg-[#EEF0E9] pb-24">
@@ -49,7 +67,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
           </Button>
         </Link>
         <div className="flex gap-2">
-          <Button variant="ghost" size="sm" className="rounded-full text-slate-600 hover:bg-slate-100">
+          <Button variant="ghost" size="sm" className="rounded-full text-slate-600 hover:bg-slate-100" onClick={handleShare}>
             <Share2 className="h-5 w-5" />
           </Button>
           <Button variant="ghost" size="sm" className="rounded-full text-slate-600 hover:bg-slate-100" onClick={() => handleAuthAction('like')}>
@@ -62,8 +80,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
         <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
           {/* Main Content */}
           <div className="space-y-6">
-            {/* Image Gallery */}
-            <div className="overflow-hidden bg-slate-200 md:rounded-2xl shadow-sm">
+            <div className="group relative overflow-hidden bg-slate-100 md:rounded-2xl shadow-sm border border-slate-200">
               <div className="relative aspect-[4/3] w-full md:aspect-video">
                 <Image
                   src={images[activeImage]}
@@ -72,6 +89,24 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                   className="object-cover"
                   unoptimized
                 />
+                
+                {/* Navigation Arrows */}
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => { e.preventDefault(); prevImage(); }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white backdrop-blur-md transition-all hover:bg-white/40 hover:scale-110 opacity-0 group-hover:opacity-100"
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </button>
+                    <button
+                      onClick={(e) => { e.preventDefault(); nextImage(); }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white backdrop-blur-md transition-all hover:bg-white/40 hover:scale-110 opacity-0 group-hover:opacity-100"
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </button>
+                  </>
+                )}
               </div>
               {images.length > 1 && (
                 <div className="flex gap-2 p-3 overflow-x-auto bg-white">
@@ -99,10 +134,20 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                         {post.type}
                     </div>
                     <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">{post.title}</h1>
-                    <div className="mt-2 flex items-center text-slate-500">
+                   <div className="mt-2 flex items-center text-sm text-slate-500">
                         <MapPin className="mr-1.5 h-4 w-4 text-slate-400" />
                         {post.location} {post.floor && <><span className="mx-2 text-slate-300">|</span>{post.floor} Floor</>}
                     </div>
+                 </div>
+                 
+                 {/* Desktop Actions */}
+                 <div className="hidden md:flex gap-3">
+                    <Button variant="outline" size="sm" className="rounded-full border-slate-200" onClick={handleShare}>
+                        <Share2 className="mr-2 h-4 w-4" /> Share
+                    </Button>
+                    <Button variant="outline" size="sm" className="rounded-full border-slate-200" onClick={() => handleAuthAction('like')}>
+                        <Heart className="mr-2 h-4 w-4" /> Save
+                    </Button>
                  </div>
                </div>
             </div>

@@ -8,6 +8,7 @@ import { Modal } from '@/components/ui/Modal';
 import { Filter, Map as MapIcon, List, Search as SearchIcon, MapPin, BedDouble, ShowerHead, Heart } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { PostCard } from '@/components/ui/PostCard';
 
 import { MOCK_LISTINGS } from "@/lib/data";
 
@@ -66,101 +67,9 @@ export default function SearchPage() {
                 </div>
              </Card>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {MOCK_LISTINGS.map(item => (
-                <Link key={item.id} href={`/post/${item.id}`} className="group">
-                  <div className="overflow-hidden rounded-2xl bg-white shadow-[0_2px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)] hover:-translate-y-1">
-                    {/* Image Section */}
-                    <div className="relative h-56 w-full overflow-hidden">
-                      <Image 
-                        src={item.image} 
-                        alt={item.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        unoptimized
-                      />
-                      {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-                      
-                      {/* Type Badge */}
-                      <div className="absolute left-4 top-4 rounded-lg bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
-                        {item.type}
-                      </div>
-                      
-                      {/* Favorite Button */}
-                      <button 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          // Add to favorites logic here
-                        }}
-                        className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-400 shadow-md backdrop-blur-sm transition-all hover:bg-white hover:text-red-500 hover:scale-110 active:scale-95"
-                      >
-                        <Heart className="h-5 w-5" />
-                      </button>
-                      
-                      {/* Price Badge */}
-                      <div className="absolute bottom-4 left-4">
-                        <div className="rounded-lg bg-white/95 px-4 py-2 shadow-lg backdrop-blur-sm">
-                          <span className="text-xl font-bold text-slate-900">৳{item.rent}</span>
-                          <span className="text-sm text-slate-500">/month</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Content Section */}
-                    <div className="p-5">
-                      {/* Title & Location */}
-                      <h3 className="text-lg font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors">
-                        {item.title}
-                      </h3>
-                      <div className="mt-2 flex items-center text-sm text-slate-500">
-                        <MapPin className="mr-1.5 h-4 w-4 text-slate-400" />
-                        <span>{item.location}</span>
-                        <span className="mx-2 text-slate-300">|</span>
-                        <span className="text-slate-600">{item.floor} Floor</span>
-                      </div>
-
-                      {/* Amenities Row */}
-                      <div className="mt-4 flex items-center gap-6">
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100">
-                            <BedDouble className="h-4 w-4 text-slate-600" />
-                          </div>
-                          <span className="text-sm font-medium text-slate-700">{item.beds} Bed</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100">
-                            <ShowerHead className="h-4 w-4 text-slate-600" />
-                          </div>
-                          <span className="text-sm font-medium text-slate-700">{item.baths} Bath</span>
-                        </div>
-                      </div>
-
-                      {/* Facilities Tags */}
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {item.facilities.slice(0, 3).map((fac) => (
-                          <span 
-                            key={fac} 
-                            className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600"
-                          >
-                            {fac}
-                          </span>
-                        ))}
-                        {item.facilities.length > 3 && (
-                          <span className="rounded-md bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-400">
-                            +{item.facilities.length - 3}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* CTA Button */}
-                      <button className="mt-5 w-full rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white transition-all hover:bg-slate-800 active:scale-[0.98]">
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                </Link>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              {MOCK_LISTINGS.filter(item => item.isActive !== false).map(item => (
+                <PostCard key={item.id} post={item} />
               ))}
             </div>
           )}

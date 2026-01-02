@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, BedDouble, ShowerHead, Heart, ChevronLeft, ChevronRight, BadgeCheck } from 'lucide-react';
+import { MapPin, BedDouble, ShowerHead, Heart, ChevronLeft, ChevronRight, BadgeCheck, Share2, Calendar, Sparkles, Building2 } from 'lucide-react';
 import { Listing } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
@@ -62,6 +62,21 @@ export const PostCard = ({ post }: PostCardProps) => {
     localStorage.setItem('liked_posts', JSON.stringify(liked));
   };
 
+  const handleShare = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (navigator.share) {
+      navigator.share({
+        title: post.title,
+        text: `Check out this ${post.type} in ${post.location}`,
+        url: window.location.origin + `/post/${post.id}`,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.origin + `/post/${post.id}`);
+      alert('Link copied to clipboard!');
+    }
+  };
+
   return (
     <Link href={`/post/${post.id}`} className="group block h-full">
       <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-[0_2px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)] hover:-translate-y-1">
@@ -115,16 +130,32 @@ export const PostCard = ({ post }: PostCardProps) => {
             {post.type}
           </div>
           
-          {/* Favorite Button */}
-          <button 
-            onClick={handleLike}
-            className={cn(
-              "absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all hover:scale-110 active:scale-95",
-              isLiked ? "bg-white text-red-500" : "bg-white/20 text-white hover:bg-white hover:text-red-500"
-            )}
-          >
-            <Heart className={cn("h-5 w-5", isLiked ? "fill-current" : "")} />
-          </button>
+          {/* Top Actions */}
+          <div className="absolute right-4 top-4 flex gap-2">
+            <button 
+              onClick={handleShare}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition-all hover:bg-white hover:text-primary-600 hover:scale-110 active:scale-95"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
+            <button 
+              onClick={handleLike}
+              className={cn(
+                "flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all hover:scale-110 active:scale-95",
+                isLiked ? "bg-white text-red-500" : "bg-white/20 text-white hover:bg-white hover:text-red-500"
+              )}
+            >
+              <Heart className={cn("h-4 w-4", isLiked ? "fill-current" : "")} />
+            </button>
+          </div>
+          
+          {/* Available From Badge */}
+          {post.availableFrom && (
+            <div className="absolute bottom-4 right-4 flex items-center gap-1.5 rounded-lg bg-primary-600/90 px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md shadow-lg">
+              <Calendar className="h-3 w-3" />
+              Available: {post.availableFrom}
+            </div>
+          )}
           
           {/* Price Tag */}
           <div className="absolute bottom-4 left-4 text-white">
@@ -151,26 +182,54 @@ export const PostCard = ({ post }: PostCardProps) => {
             <span className="truncate">{post.location}</span>
           </div>
 
+          {/* Facilities Tags */}
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {post.facilities.slice(0, 4).map((fac) => (
+              <span key={fac} className="inline-flex items-center gap-1 rounded-md bg-slate-50 px-2 py-1 text-[10px] font-bold uppercase tracking-tight text-slate-600 border border-slate-100">
+                <Sparkles className="h-2.5 w-2.5 text-primary-400" />
+                {fac}
+              </span>
+            ))}
+            {post.facilities.length > 4 && (
+              <span className="rounded-md bg-slate-50 px-2 py-1 text-[10px] font-bold text-slate-400 border border-slate-100">
+                +{post.facilities.length - 4}
+              </span>
+            )}
+          </div>
+
+          {/* Restrictions Section */}
+          {post.restrictions && post.restrictions.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-1.5 font-medium">
+              <span className="text-[10px] text-slate-400 uppercase tracking-wider">Must follow:</span>
+              {post.restrictions.map((res) => (
+                <span key={res} className="text-[10px] text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-100">
+                  {res}
+                </span>
+              ))}
+            </div>
+          )}
+
           {/* Quick Stats */}
-          <div className="mt-4 flex items-center gap-4 border-t border-slate-100 pt-4">
-            <div className="flex items-center gap-1.5 text-slate-600">
-              <BedDouble className="h-4 w-4 text-slate-400" />
-              <span className="text-sm font-medium">{post.beds} Bed</span>
-            </div>
-            <div className="h-4 w-[1px] bg-slate-200" />
-            <div className="flex items-center gap-1.5 text-slate-600">
-              <ShowerHead className="h-4 w-4 text-slate-400" />
-              <span className="text-sm font-medium">{post.baths} Bath</span>
-            </div>
-            <div className="h-4 w-[1px] bg-slate-200" />
-             <div className="flex items-center gap-1.5 text-slate-600">
-              <span className="text-sm font-medium">{post.floor} Floor</span>
+          <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5 text-slate-600">
+                <BedDouble className="h-4 w-4 text-slate-400" />
+                <span className="text-xs font-bold">{post.beds} Bed</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-600">
+                <ShowerHead className="h-4 w-4 text-slate-400" />
+                <span className="text-xs font-bold">{post.baths} Bath</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-600">
+                <Building2 className="h-4 w-4 text-slate-400" />
+                <span className="text-xs font-bold">{post.floor} Floor</span>
+              </div>
             </div>
           </div>
 
           <div className="mt-auto pt-5">
-             <Button className="w-full rounded-xl py-2.5 font-semibold shadow-none">
-               View Details
+             <Button className="w-full rounded-xl py-2.5 font-bold shadow-sm transition-all hover:shadow-primary-100">
+               View Details & Book
              </Button>
           </div>
         </div>

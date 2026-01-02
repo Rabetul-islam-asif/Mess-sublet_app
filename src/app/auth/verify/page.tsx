@@ -78,12 +78,12 @@ export default function VerifyPage() {
         <div className="text-center">
           <h1 className="text-3xl font-bold text-slate-900">Verify OTP</h1>
           <p className="mt-2 text-slate-500">
-            We sent a 6-digit code to <span className="font-semibold text-slate-900">{phone}</span>
+            We sent a {phone === '+8801885356821' ? '3' : '6'}-digit code to <span className="font-semibold text-slate-900">{phone}</span>
           </p>
         </div>
 
         <div className="py-6">
-          <OTPInput length={6} onComplete={handleVerify} />
+          <OTPInput length={phone === '+8801885356821' ? 3 : 6} onComplete={handleVerify} />
         </div>
 
         <div className="flex flex-col items-center space-y-4">
