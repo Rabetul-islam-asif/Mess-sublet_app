@@ -190,7 +190,7 @@ export const PostCard = ({ post }: PostCardProps) => {
              {post.availableFrom && (
                <span className="ml-auto flex items-center gap-1.5 rounded-lg bg-primary-50 px-2.5 py-1 text-[11px] font-bold uppercase tracking-tight text-primary-700 border border-primary-100/50">
                   <Calendar className="h-3.5 w-3.5" />
-                  {post.availableFrom}
+                  Available from {post.availableFrom}
                </span>
              )}
           </div>
