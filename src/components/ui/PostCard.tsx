@@ -3,7 +3,11 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, BedDouble, ShowerHead, Heart, ChevronLeft, ChevronRight, BadgeCheck, Share2, Calendar, Sparkles, Building2 } from 'lucide-react';
+import { 
+  MapPin, BedDouble, ShowerHead, Heart, ChevronLeft, ChevronRight, 
+  BadgeCheck, Share2, Calendar, Sparkles, Building2,
+  Wifi, Flame, Zap, Shield, ArrowUpDown, UserCheck, Sun
+} from 'lucide-react';
 import { Listing } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
@@ -12,6 +16,18 @@ import { useRouter } from 'next/navigation';
 interface PostCardProps {
   post: Listing;
 }
+
+const getFacilityIcon = (facility: string) => {
+  const f = facility.toLowerCase();
+  if (f.includes('wifi') || f.includes('internet')) return <Wifi className="h-2.5 w-2.5 text-blue-500" />;
+  if (f.includes('gas')) return <Flame className="h-2.5 w-2.5 text-orange-500" />;
+  if (f.includes('lift')) return <ArrowUpDown className="h-2.5 w-2.5 text-slate-500" />;
+  if (f.includes('generator') || f.includes('electricity')) return <Zap className="h-2.5 w-2.5 text-amber-500" />;
+  if (f.includes('security')) return <Shield className="h-2.5 w-2.5 text-indigo-500" />;
+  if (f.includes('maid') || f.includes('clean')) return <UserCheck className="h-2.5 w-2.5 text-emerald-500" />;
+  if (f.includes('balcony')) return <Sun className="h-2.5 w-2.5 text-yellow-500" />;
+  return <Sparkles className="h-2.5 w-2.5 text-primary-400" />;
+};
 
 export const PostCard = ({ post }: PostCardProps) => {
   const router = useRouter();
@@ -196,7 +212,7 @@ export const PostCard = ({ post }: PostCardProps) => {
           <div className="mt-3 flex flex-wrap gap-1.5">
             {post.facilities.slice(0, 4).map((fac) => (
               <span key={fac} className="inline-flex items-center gap-1 rounded-md bg-slate-50 px-2 py-1 text-[10px] font-bold uppercase tracking-tight text-slate-600 border border-slate-100">
-                <Sparkles className="h-2.5 w-2.5 text-primary-400" />
+                {getFacilityIcon(fac)}
                 {fac}
               </span>
             ))}

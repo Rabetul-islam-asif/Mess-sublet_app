@@ -3,12 +3,29 @@
 import { use, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, BedDouble, ShowerHead, Wifi, Phone, MessageCircle, Share2, Heart, ShieldCheck, User, Calendar, CheckCircle2, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { 
+  ArrowLeft, MapPin, BedDouble, ShowerHead, Wifi, Phone, MessageCircle, 
+  Share2, Heart, ShieldCheck, User, Calendar, CheckCircle2, 
+  ChevronLeft, ChevronRight, Info, Flame, Zap, Shield, ArrowUpDown, UserCheck, Sun, Sparkles
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { MOCK_LISTINGS, Listing } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { notFound, useRouter } from 'next/navigation';
+const getFacilityIcon = (facility: string) => {
+  const f = facility.toLowerCase();
+  const iconClass = "mr-2 h-4 w-4";
+  if (f.includes('wifi') || f.includes('internet')) return <Wifi className={cn(iconClass, "text-blue-500")} />;
+  if (f.includes('gas')) return <Flame className={cn(iconClass, "text-orange-500")} />;
+  if (f.includes('lift')) return <ArrowUpDown className={cn(iconClass, "text-slate-500")} />;
+  if (f.includes('generator') || f.includes('electricity')) return <Zap className={cn(iconClass, "text-amber-500")} />;
+  if (f.includes('security')) return <Shield className={cn(iconClass, "text-indigo-500")} />;
+  if (f.includes('maid') || f.includes('clean')) return <UserCheck className={cn(iconClass, "text-emerald-500")} />;
+  if (f.includes('balcony')) return <Sun className={cn(iconClass, "text-yellow-500")} />;
+  return <Sparkles className={cn(iconClass, "text-primary-400")} />;
+};
+
 
 export default function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // Unwrap params using use() hook as per Next.js 15+ guidance or async component pattern
@@ -216,7 +233,8 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                 <h3 className="mb-3 text-lg font-bold text-slate-900">Facilities</h3>
                 <div className="flex flex-wrap gap-2">
                     {post.facilities.map(fac => (
-                        <span key={fac} className="rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700">
+                        <span key={fac} className="flex items-center rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700">
+                            {getFacilityIcon(fac)}
                             {fac}
                         </span>
                     ))}
