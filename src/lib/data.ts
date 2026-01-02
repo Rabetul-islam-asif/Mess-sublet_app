@@ -14,6 +14,7 @@ export interface Listing {
   contactNumber?: string;
   availableFrom?: string;
   restrictions?: string[]; // e.g. "Muslim Only", "Non-Smoker", "Vegetarian"
+  isVerified?: boolean;
 }
 
 export const MOCK_LISTINGS: Listing[] = [
@@ -32,7 +33,8 @@ export const MOCK_LISTINGS: Listing[] = [
     description: "A nice single room available for a bachelor. Full tiles, clean bathroom, and south-facing window. The flat is on the 4th floor with lift facility.",
     contactNumber: "+8801700000000",
     availableFrom: "Jan 1, 2025",
-    restrictions: ["Muslim Only", "Non-Smoker"]
+    restrictions: ["Muslim Only", "Non-Smoker"],
+    isVerified: true
   },
   {
     id: 2,
@@ -49,7 +51,8 @@ export const MOCK_LISTINGS: Listing[] = [
     description: "Two rooms sublet available for a small family in Dhanmondi. High security building, near attractive locations.",
     contactNumber: "+8801700000000",
     availableFrom: "Ready",
-    restrictions: ["Family Only", "No Pets"]
+    restrictions: ["Family Only", "No Pets"],
+    isVerified: true
   },
   {
     id: 3,
@@ -65,7 +68,8 @@ export const MOCK_LISTINGS: Listing[] = [
     description: "One seat available in a shared room for a female student. Study environment, strictly for students.",
     contactNumber: "+8801700000000",
     availableFrom: "Feb 1, 2025",
-    restrictions: ["Female Student Only", "Job Holders Not Allowed"]
+    restrictions: ["Female Student Only", "Job Holders Not Allowed"],
+    isVerified: false
   },
   {
     id: 4,
@@ -80,7 +84,8 @@ export const MOCK_LISTINGS: Listing[] = [
     image: "https://i.ibb.co/5GzXhqB/room1.jpg",
     description: "Huge master bedroom with attached bath and balcony. Perfect for a couple. 6th floor with nice view.",
     contactNumber: "+8801700000000",
-    availableFrom: "Jan 1, 2025"
+    availableFrom: "Jan 1, 2025",
+    isVerified: true
   },
   {
     id: 5,
@@ -95,6 +100,7 @@ export const MOCK_LISTINGS: Listing[] = [
     image: "https://i.ibb.co/5GzXhqB/room1.jpg",
     description: "Budget friendly seat at Farmgate. Very close to Tejgaon college and University.",
     contactNumber: "+8801700000000",
-    availableFrom: "Immediate"
+    availableFrom: "Immediate",
+    isVerified: false
   },
 ];

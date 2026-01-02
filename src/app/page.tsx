@@ -1,12 +1,25 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { PostCard } from "@/components/ui/PostCard";
 import { Search, MapPin, ArrowRight, Building2, Users, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { MOCK_LISTINGS } from "@/lib/data";
+import { MOCK_LISTINGS, Listing } from "@/lib/data";
+import { getRecommendedPosts } from "@/lib/recommendations";
 
 export default function Home() {
+  const [listings, setListings] = useState<Listing[]>(MOCK_LISTINGS);
+
+  useEffect(() => {
+    // Load liked posts from local storage and get personal recommendations
+    const liked = JSON.parse(localStorage.getItem('liked_posts') || '[]');
+    if (liked.length > 0) {
+      const sorted = getRecommendedPosts(MOCK_LISTINGS, liked);
+      setListings(sorted);
+    }
+  }, []);
+
   // Calculate Stats
   const totalAds = MOCK_LISTINGS.length;
   // Get unique locations (simplified for mock)
@@ -98,7 +111,7 @@ export default function Home() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {MOCK_LISTINGS.slice(0, 8).map((post) => (
+          {listings.slice(0, 8).map((post) => (
              <div key={post.id} className="h-full">
                <PostCard post={post} />
              </div>

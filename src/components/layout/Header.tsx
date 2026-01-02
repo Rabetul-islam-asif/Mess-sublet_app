@@ -2,16 +2,34 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Store, PlusCircle, Search, Menu, MessageCircle, User, ArrowRight } from 'lucide-react';
+import { Home, Store, PlusCircle, Search, Menu, MessageCircle, User, ArrowRight, MoreVertical, Phone, Moon, HelpCircle, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui/Logo';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export const Header = () => {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,14 +52,13 @@ export const Header = () => {
   ];
 
   return (
-    <header 
-      className={cn(
-        "sticky top-0 z-40 w-full transition-all duration-200",
-        isScrolled || pathname !== '/' 
-          ? "bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20" 
-          : "bg-transparent border-transparent"
-      )}
-    >
+    <>
+      <header 
+        className={cn(
+          "fixed top-0 z-40 w-full transition-all duration-200 bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20",
+          !isScrolled && pathname === '/' && "border-transparent shadow-none"
+        )}
+      >
       <div className="flex h-[64px] items-center justify-between px-4 container mx-auto">
         {/* Left: Logo */}
         <div className="flex items-center gap-8">
@@ -86,6 +103,7 @@ export const Header = () => {
         </div>
 
         {/* Right: Actions */}
+        {/* Right: Actions */}
         <div className="flex items-center justify-end gap-3">
            <Link href="/post">
              <Button className="hidden sm:flex h-10 rounded-full px-5 font-semibold shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 hover:-translate-y-0.5 transition-all">
@@ -117,7 +135,7 @@ export const Header = () => {
                    Log In
                  </Button>
                </Link>
-               <Link href="/auth/login">
+               <Link href="/auth/signup">
                  <Button variant="secondary" className="hidden sm:flex rounded-full px-5 font-semibold text-primary-700 bg-primary-50 hover:bg-primary-100 border border-primary-200">
                    Sign Up
                  </Button>
@@ -130,8 +148,52 @@ export const Header = () => {
                </Link>
              </div>
            )}
+
+           {/* 3-Dot Menu */}
+           <div className="relative" ref={menuRef}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="rounded-full text-slate-600 hover:bg-slate-100"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <MoreVertical className="h-5 w-5" />
+              </Button>
+
+              {isMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-slate-100 bg-white p-2 shadow-xl shadow-slate-200/50 z-[999] animate-in fade-in zoom-in-95 duration-200">
+                  <div className="mb-2 px-2 py-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    Options
+                  </div>
+                    
+                    <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900">
+                      <Phone className="h-4 w-4" />
+                      Contact Us
+                    </button>
+                    
+                    <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900">
+                      <Moon className="h-4 w-4" />
+                      Dark Mode
+                    </button>
+                    
+                    <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900">
+                      <HelpCircle className="h-4 w-4" />
+                      Help & Support
+                    </button>
+                    
+                    <div className="my-1.5 h-px bg-slate-100" />
+                    
+                    <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50">
+                      <Trash2 className="h-4 w-4" />
+                      Delete Account
+                    </button>
+                  </div>
+              )}
+           </div>
         </div>
       </div>
     </header>
+    {pathname !== '/' && <div className="h-[64px]" />}
+    </>
   );
 };
