@@ -160,20 +160,20 @@ export const PostCard = ({ post }: PostCardProps) => {
         {/* Content Section */}
         <div className="flex flex-1 flex-col p-5">
           {/* Property Category & Availability Bar */}
-          <div className="mb-3 flex flex-wrap items-center gap-2 border-b border-slate-50 pb-3">
+          <div className="mb-4 flex flex-wrap items-center gap-2 border-b border-slate-100 pb-4">
              <span className={cn(
-               "rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-white shadow-sm",
+               "rounded-full px-3 py-1 text-xs font-black uppercase tracking-widest text-white shadow-sm",
                post.category === 'Mess' ? "bg-indigo-600" : 
                post.category === 'Sublet' ? "bg-amber-600" : "bg-emerald-600"
              )}>
                {post.category}
              </span>
-             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-600 border border-slate-200 uppercase tracking-tighter">
+             <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-bold text-slate-600 border border-slate-200/60 uppercase tracking-tight">
                {post.type}
              </span>
              {post.availableFrom && (
-               <span className="ml-auto flex items-center gap-1 text-[10px] font-black uppercase tracking-tighter text-primary-600">
-                  <Calendar className="h-3 w-3" />
+               <span className="ml-auto flex items-center gap-1.5 rounded-lg bg-primary-50 px-2.5 py-1 text-[11px] font-bold uppercase tracking-tight text-primary-700 border border-primary-100/50">
+                  <Calendar className="h-3.5 w-3.5" />
                   {post.availableFrom}
                </span>
              )}

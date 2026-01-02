@@ -190,10 +190,10 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
                     key={cat}
                     type="button"
                     onClick={() => setFormData({ ...formData, category: cat as any })}
-                    className={`rounded-xl border p-3 text-sm font-bold transition-all ${
+                    className={`rounded-2xl border-2 p-4 text-sm font-black uppercase tracking-widest transition-all ${
                       formData.category === cat
-                        ? 'border-primary-600 bg-primary-600 text-white shadow-md'
-                        : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
+                        ? 'border-primary-600 bg-primary-600 text-white shadow-lg shadow-primary-200 ring-2 ring-primary-50 ring-offset-2'
+                        : 'border-slate-100 hover:border-slate-200 text-slate-600 bg-slate-50/50'
                     }`}
                   >
                     {cat}
