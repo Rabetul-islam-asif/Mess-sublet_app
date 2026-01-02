@@ -170,21 +170,24 @@ export default function AdminPanel() {
           <div className="space-y-6">
             {activeTab === 'moderation' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between gap-4 flex-wrap">
-                   <h2 className="text-xl font-bold text-slate-900">Listing Moderation</h2>
-                   <div className="flex gap-2">
-                      <div className="relative">
-                        <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                   <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                     <span className="h-2 w-2 rounded-full bg-primary-500"></span>
+                     Listing Moderation
+                   </h2>
+                   <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="relative group">
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-primary-500 transition-colors" />
                         <input 
                           type="text" 
-                          placeholder="Search..." 
+                          placeholder="Search Title or ID..." 
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="rounded-xl border border-slate-200 pl-9 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none w-48 shadow-sm" 
+                          className="w-full sm:w-64 rounded-xl border border-slate-200 pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all bg-slate-50/50 hover:bg-white" 
                         />
                       </div>
                       <select 
-                        className="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500 shadow-sm"
+                        className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all bg-slate-50/50 hover:bg-white cursor-pointer appearance-none min-w-[140px]"
                         value={filterType}
                         onChange={(e: any) => setFilterType(e.target.value)}
                       >
