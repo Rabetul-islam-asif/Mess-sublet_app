@@ -33,6 +33,7 @@ export default function DashboardPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
     name: user.name,
+    phone: user.phone,
     image: user.avatar,
     idCard: null as string | null
   });
@@ -196,8 +197,15 @@ export default function DashboardPage() {
                     <div className="space-y-3">
                         <Input 
                             value={profileData.name} 
+                            placeholder="Full Name"
                             onChange={(e) => setProfileData({...profileData, name: e.target.value})}
                             className="text-lg font-bold bg-white"
+                        />
+                        <Input 
+                            value={profileData.phone} 
+                            placeholder="Contact Number"
+                            onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
+                            className="bg-white"
                         />
                         <div className="flex gap-2">
                              <Button size="sm" onClick={handleSaveProfile}>Save Changes</Button>
@@ -207,7 +215,7 @@ export default function DashboardPage() {
                 ) : (
                     <>
                         <h3 className="text-xl font-bold text-slate-900">{profileData.name}</h3>
-                        <p className="text-slate-500">{user.phone}</p>
+                        <p className="text-slate-500">{profileData.phone}</p>
                         <span className="mt-2 inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-xs font-bold text-primary-700">
                             {user.type}
                         </span>
