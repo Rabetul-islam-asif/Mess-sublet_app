@@ -55,7 +55,7 @@ export const MOCK_LISTINGS: Listing[] = [
     images: ["https://i.ibb.co/5GzXhqB/room1.jpg", "https://i.ibb.co/5GzXhqB/room1.jpg"],
     description: "Two rooms sublet available for a small family in Dhanmondi. High security building, near attractive locations.",
     contactNumber: "+8801700000000",
-    availableFrom: "1st Jan 2025",
+    availableFrom: "Ready",
     restrictions: ["Family Only", "No Pets"],
     isVerified: true,
     isActive: true
@@ -111,7 +111,7 @@ export const MOCK_LISTINGS: Listing[] = [
     image: "https://i.ibb.co/5GzXhqB/room1.jpg",
     description: "Budget friendly seat at Farmgate. Very close to Tejgaon college and University.",
     contactNumber: "+8801700000000",
-    availableFrom: "Immediate",
+    availableFrom: "Ready",
     isVerified: false,
     isActive: true
   },

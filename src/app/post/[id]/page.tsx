@@ -283,7 +283,9 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                                <Calendar className="h-5 w-5 text-slate-400" />
                                <div>
                                  <p className="text-xs text-slate-500">Available From</p>
-                                 <p className="font-semibold text-slate-800">{post.availableFrom}</p>
+                                 <p className="font-semibold text-slate-800">
+                                   {post.availableFrom?.toLowerCase() === 'ready' ? 'Now' : post.availableFrom}
+                                 </p>
                                </div>
                              </div>
                          </div>
