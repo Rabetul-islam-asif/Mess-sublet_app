@@ -23,7 +23,8 @@ export async function POST(request: Request) {
       id: isDemoAccount ? 'demo_user' : 'user_123',
       name: isDemoAccount ? 'Demo Account' : (isNewUser ? null : 'Asif Rabetul'),
       phone: phone,
-      isVerified: true
+      isVerified: true,
+      role: isDemoAccount ? 'admin' : 'user'
     };
 
     return NextResponse.json({ 

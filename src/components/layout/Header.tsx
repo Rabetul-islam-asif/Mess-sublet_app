@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Store, PlusCircle, Search, Menu, MessageCircle, User, ArrowRight, MoreVertical, Phone, Moon, HelpCircle, Trash2, LogOut, LayoutDashboard } from 'lucide-react';
+import { Home, Store, PlusCircle, Search, Menu, MessageCircle, User, ArrowRight, MoreVertical, Phone, Moon, HelpCircle, Trash2, LogOut, LayoutDashboard, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui/Logo';
@@ -177,10 +177,18 @@ export const Header = () => {
                   </div>
 
                   {user ? (
-                      <Link href="/dashboard?tab=profile" className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900">
-                        <User className="h-4 w-4" />
-                        Profile
-                      </Link>
+                      <>
+                        {user.role === 'admin' && (
+                          <Link href="/admin" className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-bold text-primary-600 transition-colors hover:bg-primary-50">
+                            <ShieldCheck className="h-4 w-4" />
+                            Admin Panel
+                          </Link>
+                        )}
+                        <Link href="/dashboard?tab=profile" className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900">
+                          <User className="h-4 w-4" />
+                          Profile
+                        </Link>
+                      </>
                   ) : (
                       <button 
                          onClick={() => {

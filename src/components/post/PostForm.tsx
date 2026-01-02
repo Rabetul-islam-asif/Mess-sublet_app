@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, Upload, MapPin, Check, Home, DollarSign, Calendar } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Upload, MapPin, Check, Home, DollarSign, Calendar, AlertTriangle, ShieldAlert } from 'lucide-react';
+import Script from 'next/script';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useRouter } from 'next/navigation';
@@ -51,6 +52,31 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
     ...initialData,
   });
   const [customRestriction, setCustomRestriction] = useState('');
+  const [isnsfwFlagged, setIsnsfwFlagged] = useState(false);
+  const [modelLoading, setModelLoading] = useState(false);
+
+  // NSFWJS Detection Logic
+  const checkNSFW = async (imageElement: HTMLImageElement): Promise<boolean> => {
+    try {
+      if (!(window as any).nsfwjs) return false;
+      
+      setModelLoading(true);
+      const model = await (window as any).nsfwjs.load();
+      const predictions = await model.classify(imageElement);
+      setModelLoading(false);
+      
+      // Check for high probability of Porn or Sexy
+      const adultContent = predictions.find((p: any) => 
+        (p.className === 'Porn' || p.className === 'Sexy') && p.probability > 0.7
+      );
+      
+      return !!adultContent;
+    } catch (err) {
+      console.error("NSFW check failed", err);
+      setModelLoading(false);
+      return false;
+    }
+  };
 
   const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
@@ -97,13 +123,34 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const formData = new FormData();
-        formData.append('image', file);
+        
+        // 1. Preview for NSFW check
+        const reader = new FileReader();
+        const nsfwCheckResult = await new Promise<boolean>((resolve) => {
+          reader.onload = async (event) => {
+            const img = new (window as any).Image();
+            img.src = event.target?.result;
+            img.onload = async () => {
+              const isNSFW = await checkNSFW(img);
+              resolve(isNSFW);
+            };
+          };
+          reader.readAsDataURL(file);
+        });
 
-        // ImgBB Upload
+        if (nsfwCheckResult) {
+          setIsnsfwFlagged(true);
+          alert("Warning: This image contains restricted (18+) content. Your post will be automatically paused and sent for admin review.");
+          // We still let them upload but flag the post
+        }
+
+        // 2. Upload to ImgBB
+        const uploadFormData = new FormData();
+        uploadFormData.append('image', file);
+
         const response = await fetch('https://api.imgbb.com/1/upload?key=659c558f44d89bffc201c4e258836605', {
           method: 'POST',
-          body: formData,
+          body: uploadFormData,
         });
 
         const data = await response.json();
@@ -341,10 +388,19 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
   const router = useRouter();
 
   const handleSubmit = async () => {
-    // Navigate to dashboard after "update" or "create"
-    // In a real app, you'd await an API call here.
-    console.log("Submitting form data:", formData);
+    // If nsfwFlagged, set isActive to false
+    const submissionData = {
+      ...formData,
+      isActive: !isnsfwFlagged,
+      isUnderReview: isnsfwFlagged
+    };
+
+    console.log("Submitting form data:", submissionData);
     
+    if (isnsfwFlagged) {
+      alert("Post submitted! Since it contains restricted content, it is currently PAUSED and waiting for admin approval.");
+    }
+
     // Simulate delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
@@ -352,7 +408,20 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
   };
 
   return (
-    <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.12)]">
+    <>
+      <Script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs" strategy="beforeInteractive" />
+      <Script src="https://cdn.jsdelivr.net/npm/nsfwjs" strategy="beforeInteractive" />
+      
+      <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.12)]">
+        {isnsfwFlagged && (
+           <div className="mb-6 flex items-center gap-3 rounded-xl bg-red-50 p-4 border border-red-100 text-red-600 animate-pulse">
+              <ShieldAlert className="h-5 w-5" />
+              <div className="text-sm font-medium">
+                Restricted content detected. Post will be hidden until admin review.
+              </div>
+           </div>
+        )}
+
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-slate-900">{isEditing ? 'Edit Post' : 'Create New Post'}</h2>
         <div className="mt-6 flex w-full items-center">
@@ -408,6 +477,7 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
           {currentStep !== steps.length - 1 && <ArrowRight className="ml-2 h-4 w-4" />}
         </Button>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
