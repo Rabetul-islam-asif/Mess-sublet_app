@@ -130,9 +130,18 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
             <div className="px-4 md:px-0 bg-white md:bg-transparent py-4 md:py-0 rounded-xl md:rounded-none">
                <div className="flex items-start justify-between">
                  <div>
-                    <div className="mb-2 inline-flex items-center rounded-lg bg-slate-900 px-3 py-1 text-xs font-semibold text-white">
-                        {post.type}
-                    </div>
+                     <div className="mb-2 flex items-center gap-2">
+                        <span className={cn(
+                          "rounded-lg px-3 py-1 text-xs font-black uppercase tracking-widest text-white shadow-md",
+                          post.category === 'Mess' ? "bg-indigo-600" : 
+                          post.category === 'Sublet' ? "bg-amber-600" : "bg-emerald-600"
+                        )}>
+                          {post.category}
+                        </span>
+                        <span className="rounded-lg bg-slate-900 px-3 py-1 text-xs font-semibold text-white">
+                            {post.type}
+                        </span>
+                     </div>
                     <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">{post.title}</h1>
                    <div className="mt-2 flex items-center text-sm text-slate-500">
                         <MapPin className="mr-1.5 h-4 w-4 text-slate-400" />

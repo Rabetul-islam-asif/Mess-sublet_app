@@ -1,6 +1,7 @@
 export interface Listing {
   id: number;
   title: string;
+  category: 'Mess' | 'Sublet' | 'Flat';
   rent: number; // Changed to number for easier math/filtering
   location: string;
   floor?: string;
@@ -22,6 +23,7 @@ export const MOCK_LISTINGS: Listing[] = [
   {
     id: 1,
     title: "Single Room for Bachelor",
+    category: "Mess",
     rent: 6000,
     location: "Mohammadpur, Road 3",
     floor: "4th",
@@ -41,6 +43,7 @@ export const MOCK_LISTINGS: Listing[] = [
   {
     id: 2,
     title: "Sublet for Small Family",
+    category: "Sublet",
     rent: 12000,
     location: "Dhanmondi, Road 12A",
     floor: "1st",
@@ -60,6 +63,7 @@ export const MOCK_LISTINGS: Listing[] = [
   {
     id: 3,
     title: "Seat in Shared Room",
+    category: "Mess",
     rent: 3500,
     location: "Mirpur 10",
     floor: "2nd",
@@ -78,6 +82,7 @@ export const MOCK_LISTINGS: Listing[] = [
   {
     id: 4,
     title: "Master Bed for Couple",
+    category: "Sublet",
     rent: 15000,
     location: "Uttara, Sector 4",
     floor: "6th",
@@ -95,6 +100,7 @@ export const MOCK_LISTINGS: Listing[] = [
   {
     id: 5,
     title: "Single Seat",
+    category: "Mess",
     rent: 3000,
     location: "Farmgate, Indira Road",
     floor: "3rd",

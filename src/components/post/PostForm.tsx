@@ -18,6 +18,7 @@ const steps = [
 
 interface PostData {
   tenantType: string;
+  category: 'Mess' | 'Sublet' | 'Flat';
   rent: string;
   availableFrom: string;
   area: string;
@@ -39,6 +40,7 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<PostData>({
     tenantType: 'Bachelor Male',
+    category: 'Sublet',
     rent: '',
     availableFrom: '',
     area: '',
@@ -181,7 +183,27 @@ export const PostForm = ({ initialData, isEditing = false }: PostFormProps) => {
         return (
           <div className="space-y-6">
             <div className="space-y-4">
-              <label className="block text-sm font-medium text-slate-700">Tenant Type</label>
+              <label className="block text-sm font-medium text-slate-700">Property Category</label>
+              <div className="grid grid-cols-3 gap-3">
+                {['Mess', 'Sublet', 'Flat'].map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, category: cat as any })}
+                    className={`rounded-xl border p-3 text-sm font-bold transition-all ${
+                      formData.category === cat
+                        ? 'border-primary-600 bg-primary-600 text-white shadow-md'
+                        : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-slate-700">Preferred Tenant</label>
               <div className="grid grid-cols-3 gap-3">
                 {['Bachelor Male', 'Bachelor Female', 'Small Family'].map((type) => (
                   <button

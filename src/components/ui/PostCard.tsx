@@ -125,9 +125,18 @@ export const PostCard = ({ post }: PostCardProps) => {
             </>
           )}
           
-          {/* Type Badge - Simplified back to single item */}
-          <div className="absolute left-4 top-4 rounded-lg bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md shadow-lg border border-white/10">
-            {post.type}
+          {/* Category & Type Badge */}
+          <div className="absolute left-4 top-4 flex flex-col gap-1.5">
+             <div className={cn(
+               "w-fit rounded-md px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-lg border border-white/20 backdrop-blur-md",
+               post.category === 'Mess' ? "bg-indigo-600/90" : 
+               post.category === 'Sublet' ? "bg-amber-600/90" : "bg-emerald-600/90"
+             )}>
+               {post.category}
+             </div>
+             <div className="w-fit rounded-md bg-slate-900/80 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-md border border-white/10">
+               {post.type}
+             </div>
           </div>
           
           {/* Top Actions */}
