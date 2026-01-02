@@ -34,6 +34,7 @@ export default function DashboardPage() {
   const [profileData, setProfileData] = useState({
     name: user.name,
     phone: user.phone,
+    about: "I am a professional post giver interested in providing the best rental experience in Dhaka.",
     image: user.avatar,
     idCard: null as string | null
   });
@@ -207,6 +208,13 @@ export default function DashboardPage() {
                             onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
                             className="bg-white"
                         />
+                        <textarea 
+                            value={profileData.about} 
+                            placeholder="Tell us about yourself (Optional, max 200 words)"
+                            onChange={(e) => setProfileData({...profileData, about: e.target.value})}
+                            className="w-full rounded-xl border border-slate-200 p-4 text-sm focus:ring-2 focus:ring-primary-500 outline-none min-h-[100px] bg-white"
+                            maxLength={1000}
+                        />
                         <div className="flex gap-2">
                              <Button size="sm" onClick={handleSaveProfile}>Save Changes</Button>
                              <Button variant="ghost" size="sm" onClick={() => setIsEditing(false)}>Cancel</Button>
@@ -216,7 +224,10 @@ export default function DashboardPage() {
                     <>
                         <h3 className="text-xl font-bold text-slate-900">{profileData.name}</h3>
                         <p className="text-slate-500">{profileData.phone}</p>
-                        <span className="mt-2 inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-xs font-bold text-primary-700">
+                        <p className="mt-3 text-sm text-slate-600 leading-relaxed italic border-l-4 border-primary-200 pl-4">
+                           "{profileData.about || 'No about information provided.'}"
+                        </p>
+                        <span className="mt-4 inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-xs font-bold text-primary-700">
                             {user.type}
                         </span>
                     </>

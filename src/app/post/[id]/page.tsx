@@ -3,8 +3,9 @@
 import { use, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, BedDouble, ShowerHead, Wifi, Phone, MessageCircle, Share2, Heart, ShieldCheck, User, Calendar, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, MapPin, BedDouble, ShowerHead, Wifi, Phone, MessageCircle, Share2, Heart, ShieldCheck, User, Calendar, CheckCircle2, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Modal } from '@/components/ui/Modal';
 import { MOCK_LISTINGS, Listing } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { notFound, useRouter } from 'next/navigation';
@@ -15,6 +16,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
   const router = useRouter();
   const [post, setPost] = useState<Listing | null>(null);
   const [activeImage, setActiveImage] = useState(0);
+  const [showOwnerDetails, setShowOwnerDetails] = useState(false);
 
   useEffect(() => {
     const foundPost = MOCK_LISTINGS.find(p => p.id === parseInt(resolvedParams.id));
@@ -274,6 +276,13 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                                 </span>
                             </button>
                         </div>
+                        <Button 
+                          variant="outline" 
+                          className="w-full rounded-xl py-4 border-slate-200 text-slate-600 font-bold"
+                          onClick={() => setShowOwnerDetails(true)}
+                        >
+                          <Info className="mr-2 h-5 w-5" /> View Owner Profile
+                        </Button>
                     </div>
 
                     <div className="mt-4 text-center text-sm text-slate-400">
@@ -297,6 +306,47 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               </button>
           </div>
       </div>
+      <Modal 
+        isOpen={showOwnerDetails} 
+        onClose={() => setShowOwnerDetails(false)}
+        title="Owner Information"
+      >
+        <div className="space-y-6">
+           <div className="flex items-center gap-4">
+              <div className="h-20 w-20 rounded-full bg-slate-100 flex items-center justify-center text-3xl font-bold text-slate-400">
+                  {post.title.charAt(0)}
+              </div>
+              <div>
+                  <h4 className="text-xl font-bold text-slate-900 uppercase">Rabetul Islam</h4>
+                  <p className="text-slate-500 font-medium">+880 1885 356821</p>
+                  <div className="mt-1 flex gap-2">
+                    <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-[10px] font-bold text-green-700 uppercase">
+                      Verified
+                    </span>
+                    <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-[10px] font-bold text-blue-700 uppercase">
+                      Legacy Post Giver
+                    </span>
+                  </div>
+              </div>
+           </div>
+           
+           <div className="space-y-2 border-t border-slate-100 pt-6">
+              <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest">About the Owner</h5>
+              <p className="text-slate-600 leading-relaxed italic">
+                "I am a student of North South University and have been living in this area for 5 years. I am looking for a responsible roommate who values cleanliness and quiet environment."
+              </p>
+           </div>
+           
+           <div className="grid grid-cols-2 gap-3 pt-4">
+              <Button onClick={() => handleAuthAction('call')} className="font-bold">
+                 Call Now
+              </Button>
+              <Button variant="outline" onClick={() => handleAuthAction('message')} className="font-bold border-slate-200">
+                 Message
+              </Button>
+           </div>
+        </div>
+      </Modal>
     </div>
   );
 }
