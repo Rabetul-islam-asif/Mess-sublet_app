@@ -205,10 +205,13 @@ export const Header = () => {
 
                    <div className="my-1.5 h-px bg-slate-100" />
                     
-                    <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900">
+                    <a 
+                      href="mailto:asifrabetul@gmail.com"
+                      className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+                    >
                       <Phone className="h-4 w-4" />
                       Contact Us
-                    </button>
+                    </a>
                     
                     <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900">
                       <Moon className="h-4 w-4" />
